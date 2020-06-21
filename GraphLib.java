@@ -3,7 +3,7 @@ import java.util.*;
 /**
  * Library for graph analysis.
  * 
- * @author Caroline Tornquist Fall 2019, Updated May 2020
+ * @author Caroline Tornquist. Fall 2019, Updated June 2020
  */
 
 public class GraphLib<V,E> {

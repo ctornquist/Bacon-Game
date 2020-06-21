@@ -4,6 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
+/**
+ * Game to tell you the degrees of separation between actors, and manipulate a large graph with movie/actor data.
+ *
+ * @author Caroline Tornquist. Fall 2019, Updated June 2020
+ */
+
 public class BaconGame {
     static AdjacencyMapGraph<String, Set<String>> graph = new AdjacencyMapGraph<String,Set<String>>();      //graph of all actors connected by movie edges
     Map<String, String> actorID = new HashMap<String, String>();                                        //maps actor IDs to actors
@@ -14,12 +20,12 @@ public class BaconGame {
     static Graph<String, Set<String>> BFStree;                                             //same as "graph" but after running BFS
     Map<String, Double> actorToAvgSeparation = new HashMap<>();                            //maps actors to their avg separations
     List<String> centers = new ArrayList<>();                                              //sorted list of best centers by avg. sep.
-    String actorFile = "/Users/caroline/Documents/IdeaProjects/cs10/ps4/actors.txt";
-    String movieFile = "/Users/caroline/Documents/IdeaProjects/cs10/ps4/movies.txt";
-    String movieActorFile = "/Users/caroline/Documents/IdeaProjects/cs10/ps4/movie-actors.txt";
+    String actorFile = "actors.txt";                                                       //have to update to absolute path
+    String movieFile = "movies.txt";
+    String movieActorFile = "movie-actors.txt";
 
 
-    /*
+    /**
      * Makes a map of each Actor ID to the actor it represents
      */
     public void makeActorID () {
@@ -29,7 +35,7 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("18 file not found");
+            System.err.println("Unable to open file.");
         }
 
         //reading input, adding to map of actorIDs to actors
@@ -42,7 +48,7 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("35 can't read line");
+            System.err.println("Can't read next line.");
         }
 
         //closing input
@@ -51,22 +57,21 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("46 can't close file");
+            System.err.println("Can't close file.");
         }
     }
 
 
-    /*
+    /**
      * Makes a map of each Movie ID to the movie it represents
      */
     public void makeMovieID() {
-        //opening movieID file
         try {
-            input = new BufferedReader(new FileReader(movieFile));
+            input = new BufferedReader(new FileReader(movieFile));          //opening movieID file
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("62 file not found");
+            System.err.println("Can't open file.");
         }
 
         //reading input, adding to map of movieIDs to movies
@@ -79,30 +84,28 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("74 can't read line");
+            System.err.println("Can't read next line.");
         }
 
-        //closing input
         try {
-            input.close();
+            input.close();                                                  //closing input
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("82 can't close file");
+            System.err.println("Can't close file.");
         }
     }
 
-    /*
+    /**
      * Makes a map of each Movie ID to an array of the Actor IDs that appear in it
      */
     public void makeMovieToActor () {
-        //opening movie-actors file
         try {
-            input = new BufferedReader(new FileReader(movieActorFile));
+            input = new BufferedReader(new FileReader(movieActorFile));     //opening movie-actors file
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("95 file not found");
+            System.err.println("Can't open file.");
         }
 
         //reading input, making map of movieIDs to actorsIDs
@@ -133,7 +136,7 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("101 can't read line");
+            System.err.println("Can't read nest line.");
         }
 
         //closing input
@@ -142,7 +145,7 @@ public class BaconGame {
         }
         catch (Exception e) {
             System.err.println(e);
-            System.err.println("109 can't close file");
+            System.err.println("Can't close file");
         }
     }
 
@@ -278,7 +281,7 @@ public class BaconGame {
             vertToDegree.put(s, graph.inDegree(s));
         }
 
-        System.out.println("The actors with degree between " +low+ " and " +high+ " are:");
+        System.out.println("The actors with # of connections between " +low+ " and " +high+ " are:");
 
         //if the number of degrees is between low and high (from user input) then print them in descending order
         for (String x: vertsByInDegree) {
@@ -383,7 +386,7 @@ public class BaconGame {
                     game.runGetPath(name);
                 }
                 else {
-                    System.out.println("name not found! please try again");
+                    System.out.println("Name not found! Please try again, making sure to capitalize the first letter of first+last name.");
                 }
             }
             else if (s.charAt(0) == 'i') {
@@ -398,7 +401,7 @@ public class BaconGame {
                     game.updateCenter(name);
                 }
                 else {
-                    System.out.println("name not found! please try again.");
+                    System.out.println("Name not found! Please try again, making sure to capitalize the first letter of first+last name.");
                 }
             }
             else if (s.charAt(0) == 'd') {
@@ -435,7 +438,7 @@ public class BaconGame {
                 }
             }
             else if (s.charAt(0) == 'c') {
-                System.out.println("What range would you like? (positive for top, negative for bottom)");
+                System.out.println("What number of actors would you like? (positive for best, negative for worst)");
                 int num;
                 try {
                     num = in.nextInt();
@@ -459,7 +462,7 @@ public class BaconGame {
             //checking to make sure the user is typing one of the commands listed
             while (s.charAt(0) != 'u' && s.charAt(0) != 'p' && s.charAt(0) != 'i' &&
                     s.charAt(0) != 'd' && s.charAt(0) != 's' && s.charAt(0) != 'q' && s.charAt(0) != 'c') {
-                System.out.println("wrong input! try again.");
+                System.out.println("Please type one of the commands listed.");
                 s = in.nextLine();
             }
         }
